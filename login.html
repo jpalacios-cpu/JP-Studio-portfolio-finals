@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP STUDIO | Admin Login</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: #080510;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: #7600ff;
+            filter: blur(180px);
+            opacity: 0.20;
+            top: -250px;
+            left: -200px;
+            animation: moveGlow 8s infinite alternate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: #bd00ff;
+            filter: blur(180px);
+            opacity: 0.16;
+            bottom: -250px;
+            right: -150px;
+            animation: moveGlow 10s infinite alternate-reverse;
+        }
+
+        @keyframes moveGlow {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(100px, 70px);
+            }
+        }
+
+        /* Main container */
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid rgba(190, 120, 255, 0.25);
+            border-radius: 25px;
+            overflow: hidden;
+            background: rgba(18, 12, 30, 0.85);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 60px rgba(126, 0, 255, 0.15);
+            position: relative;
+            z-index: 1;
+            animation: appear 1s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* LEFT SIDE */
+        .brand-side {
+            background:
+                radial-gradient(circle at center,
+                rgba(128, 0, 255, 0.25),
+                transparent 65%),
+                linear-gradient(145deg, #171024, #090611);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 45px;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+        }
+
+        .brand-side::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(185, 100, 255, 0.18);
+            border-radius: 50%;
+            animation: rotate 18s linear infinite;
+        }
+
+        .brand-side::after {
+            content: "";
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border: 1px dashed rgba(185, 100, 255, 0.15);
+            border-radius: 50%;
+            animation: rotate 25s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-logo {
+            width: 100%;
+            max-width: 350px;
+            height: 260px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 18px rgba(168, 70, 255, 0.65));
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from {
+                filter: drop-shadow(0 0 8px #8000ff);
+                transform: scale(0.98);
+            }
+            to {
+                filter: drop-shadow(0 0 28px #bd65ff);
+                transform: scale(1.02);
+            }
+        }
+
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            letter-spacing: 7px;
+            margin-top: 15px;
+            color: #ffffff;
+        }
+
+        .brand-title span {
+            color: #bd75ff;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #c6a5e8;
+            margin-top: 12px;
+        }
+
+        .brand-description {
+            max-width: 350px;
+            margin-top: 35px;
+            color: #aaa0b8;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .brand-line {
+            width: 70px;
+            height: 3px;
+            background: linear-gradient(90deg, #7600ff, #e1b5ff);
+            margin: 25px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #a000ff;
+        }
+
+        .brand-footer {
+            position: absolute;
+            bottom: 25px;
+            color: #71677e;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* RIGHT SIDE */
+        .login-side {
+            padding: 65px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #7500ff, #c000ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            box-shadow: 0 0 30px rgba(150, 0, 255, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .login-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .login-heading span {
+            color: #bd75ff;
+        }
+
+        .login-description {
+            font-size: 12px;
+            color: #92899e;
+            margin-bottom: 38px;
+        }
+
+        .input-group {
+            margin-bottom: 23px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #d8cde5;
+            margin-bottom: 10px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box i {
+            position: absolute;
+            top: 50%;
+            left: 17px;
+            transform: translateY(-50%);
+            color: #a66be3;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 16px 48px;
+            border-radius: 12px;
+            outline: none;
+            border: 1px solid rgba(180, 120, 255, 0.22);
+            background: rgba(255,255,255,0.04);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .input-box input:focus {
+            border-color: #a64dff;
+            box-shadow: 0 0 15px rgba(150, 0, 255, 0.18);
+        }
+
+        .input-box input::placeholder {
+            color: #70677b;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #93869f;
+            cursor: pointer;
+        }
+
+        .remember-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #a99eb5;
+            margin-bottom: 28px;
+        }
+
+        .remember-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .remember-row input {
+            accent-color: #a000ff;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(100deg, #6900d9, #b000ff);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 25px rgba(145, 0, 255, 0.25);
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px rgba(170, 0, 255, 0.55);
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .message {
+            font-size: 12px;
+            margin-top: 18px;
+            min-height: 20px;
+            text-align: center;
+        }
+
+        .security-note {
+            margin-top: 35px;
+            text-align: center;
+            color: #70677b;
+            font-size: 10px;
+        }
+
+        .security-note i {
+            color: #a66be3;
+            margin-right: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+                margin: 25px 0;
+            }
+
+            .brand-side {
+                min-height: 330px;
+                padding: 30px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+            }
+
+            .brand-logo {
+                height: 145px;
+                max-width: 230px;
+            }
+
+            .brand-title {
+                font-size: 22px;
+            }
+
+            .brand-description {
+                display: none;
+            }
+
+            .brand-footer {
+                display: none;
+            }
+
+            .brand-side::before {
+                width: 210px;
+                height: 210px;
+            }
+
+            .brand-side::after {
+                width: 250px;
+                height: 250px;
+            }
+
+            .login-side {
+                padding: 40px 30px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .login-heading {
+                font-size: 22px;
+            }
+
+            .brand-subtitle {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- LEFT BRANDING PANEL -->
+        <section class="brand-side">
+
+            <div class="brand-content">
+
+                <img
+                    src="images/jp-studio-logo.png"
+                    alt="JP Studio Logo"
+                    class="brand-logo"
+                >
+
+                <h1 class="brand-title">
+                    JP <span>STUDIO</span>
+                </h1>
+
+                <p class="brand-subtitle">
+                    CREATIVITY • INNOVATION • TECHNOLOGY
+                </p>
+
+                <div class="brand-line"></div>
+
+                <p class="brand-description">
+                    Welcome to my creative digital space.
+                    Where imagination meets technology,
+                    and every idea becomes an opportunity
+                    to create something extraordinary.
+                </p>
+
+            </div>
+
+            <p class="brand-footer">
+                © 2026 JP STUDIO | ALL RIGHTS RESERVED
+            </p>
+
+        </section>
+
+
+        <!-- RIGHT LOGIN PANEL -->
+        <section class="login-side">
+
+            <div class="login-icon">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+
+            <h2 class="login-heading">
+                ADMIN <span>LOGIN</span>
+            </h2>
+
+            <p class="login-description">
+                Enter your credentials to access your portfolio.
+            </p>
+
+            <form id="loginForm">
+
+                <!-- EMAIL -->
+                <div class="input-group">
+
+                    <label for="email">Email Address</label>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="input-group">
+
+                    <label for="password">Password</label>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password"
+                            id="togglePassword"
+                            title="Show password"
+                        ></i>
+                    </div>
+
+                </div>
+
+
+                <!-- REMEMBER EMAIL -->
+                <div class="remember-row">
+
+                    <label>
+                        <input type="checkbox" id="rememberMe">
+                        Remember email
+                    </label>
+
+                    <span>Authorized admin only</span>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+                <button type="submit" class="login-button" id="loginButton">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    SIGN IN
+                </button>
+
+                <p class="message" id="message"></p>
+
+            </form>
+
+            <div class="security-note">
+                <i class="fa-solid fa-shield-halved"></i>
+                PRIVATE ADMIN ACCESS
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        // =====================================
+        // JP STUDIO ADMIN LOGIN SETTINGS
+        // =====================================
+
+        // Use your email address here.
+        const ADMIN_EMAIL = "jpalacios@usa.edu.ph";
+
+        // IMPORTANT:
+        // Replace this with a NEW demo password.
+        // Do not put your actual email account password here.
+        const ADMIN_PASSWORD = "jhomerjanelle";
+
+
+        // =====================================
+        // ELEMENTS
+        // =====================================
+
+        const loginForm = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const rememberMe = document.getElementById("rememberMe");
+        const message = document.getElementById("message");
+        const togglePassword = document.getElementById("togglePassword");
+
+
+        // =====================================
+        // REMEMBER EMAIL
+        // =====================================
+
+        const savedEmail = localStorage.getItem("jpStudioEmail");
+
+        if (savedEmail) {
+            emailInput.value = savedEmail;
+            rememberMe.checked = true;
+        }
+
+
+        // =====================================
+        // SHOW / HIDE PASSWORD
+        // =====================================
+
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+                togglePassword.classList.remove("fa-eye");
+                togglePassword.classList.add("fa-eye-slash");
+
+            } else {
+
+                passwordInput.type = "password";
+                togglePassword.classList.remove("fa-eye-slash");
+                togglePassword.classList.add("fa-eye");
+
+            }
+
+        });
+
+
+        // =====================================
+        // LOGIN FUNCTION
+        // =====================================
+
+        loginForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const enteredEmail = emailInput.value.trim().toLowerCase();
+            const enteredPassword = passwordInput.value;
+
+            if (
+                enteredEmail === ADMIN_EMAIL.toLowerCase() &&
+                enteredPassword === ADMIN_PASSWORD
+            ) {
+
+                message.style.color = "#75ffae";
+                message.textContent = "Login successful! Welcome to JP Studio.";
+
+                if (rememberMe.checked) {
+                    localStorage.setItem("jpStudioEmail", enteredEmail);
+                } else {
+                    localStorage.removeItem("jpStudioEmail");
+                }
+
+                sessionStorage.setItem("jpDemoLoggedIn", "true");
+
+                setTimeout(function () {
+                    window.location.href = "home.html";
+                }, 1000);
+
+            } else {
+
+                message.style.color = "#ff6b8a";
+                message.textContent = "Incorrect email or password. Please try again.";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

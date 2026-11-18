@@ -1,0 +1,3000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP Studio | Jhomer Palacios</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* GENERAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+:root {
+    --purple: #9200ff;
+    --pink: #d000ff;
+    --red: #e50925;
+    --gold: #ffd700;
+    --black: #05030b;
+}
+body {
+    background: var(--black);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+a {
+    color: white;
+    text-decoration: none;
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+section {
+    padding: 100px 0;
+    scroll-margin-top: 80px;
+    position: relative;
+    z-index: 2;
+}
+footer {
+    position: relative;
+    z-index: 2;
+}
+/* GLOBAL RAIN CANVAS */
+#rainCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+#rainCanvas.hidden {
+    opacity: 0;
+}
+/* NAVIGATION */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(5,3,11,.94);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #8500ff66;
+}
+nav {
+    height: 78px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.logo-icon {
+    height: 48px;
+    width: 48px;
+    border: 2px solid var(--pink);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+    font-size: 22px;
+    font-weight: 900;
+    box-shadow: 0 0 15px var(--purple);
+}
+.logo h2 {
+    font-size: 20px;
+}
+.logo small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #bd79ff;
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.nav-links {
+    display: flex;
+    gap: 17px;
+    list-style: none;
+}
+.nav-links a {
+    font-size: 11px;
+    transition: .3s;
+}
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--pink);
+}
+.rain-toggle-btn {
+    padding: 7px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--pink);
+    background: rgba(24, 0, 39, 0.85);
+    color: #f3dcff;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: .3s;
+}
+.rain-toggle-btn:hover {
+    background: var(--purple);
+    box-shadow: 0 0 14px rgba(208, 0, 255, 0.45);
+}
+.rain-toggle-btn.off {
+    border-color: #5b4372;
+    color: #a99ab8;
+    background: rgba(15, 10, 24, 0.8);
+}
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+/* HOME PAGE */
+#home {
+    min-height: 100vh;
+    padding: 125px 0 35px;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 80% 50%,#390064,transparent 40%),
+        linear-gradient(120deg,#05030b,#140621,#05030b);
+}
+#wallpaper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity .8s ease;
+    pointer-events: none;
+}
+#wallpaper.show {
+    opacity: 1;
+}
+.home-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        rgba(5,0,12,.95),
+        rgba(5,0,12,.65),
+        rgba(5,0,12,.35)
+    );
+}
+.home-content {
+    position: relative;
+    z-index: 2;
+}
+.hero {
+    min-height: 480px;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    align-items: center;
+    gap: 40px;
+}
+.welcome {
+    color: #c879ff;
+    letter-spacing: 3px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.hero h1 {
+    font-size: clamp(42px,6vw,75px);
+    line-height: 1.15;
+    margin: 20px 0;
+    font-weight: 900;
+}
+.greeting {
+    display: inline-block;
+    font-size: 0.52em;
+    line-height: 1.25;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.name-line {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 1em;
+    letter-spacing: -1.5px;
+}
+.white-name {
+    color: white;
+}
+.gold-name {
+    background: linear-gradient(
+        90deg,#fff5a0,#ffd700,#ff9800,#ffe878
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 10px #ffd70055);
+}
+.hero h3 {
+    font-size: 18px;
+    font-style: italic;
+    color: #e5d9f5;
+}
+.hero h3 span {
+    color: var(--pink);
+}
+.gold-line {
+    width: 140px;
+    height: 4px;
+    margin: 20px 0;
+    background: linear-gradient(90deg,var(--gold),var(--pink));
+    border-radius: 20px;
+}
+.hero p {
+    max-width: 550px;
+    color: #d1c5dd;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 25px;
+}
+.btn {
+    padding: 13px 24px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: .3s;
+}
+.btn-primary {
+    background: var(--gold);
+    color: black;
+}
+.btn-secondary {
+    border: 1px solid var(--purple);
+}
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px var(--purple);
+}
+.socials {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+.socials a {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--purple);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    transition: .3s;
+}
+.socials a:hover {
+    background: var(--purple);
+    transform: translateY(-5px);
+}
+/* PROFILE */
+.hero-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 430px;
+}
+.profile-circle {
+    width: 330px;
+    height: 420px;
+    overflow: hidden;
+    border: 3px solid var(--pink);
+    border-radius: 48% 48% 10px 10px;
+    box-shadow: 0 0 25px var(--pink),0 0 55px var(--purple);
+    position: relative;
+    z-index: 2;
+    animation: floating 4s ease-in-out infinite;
+}
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+}
+.glow-ring {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    border: 3px solid var(--purple);
+    box-shadow: 0 0 35px var(--pink);
+    animation: glow 3s infinite alternate;
+}
+.dream-text {
+    position: absolute;
+    right: 0;
+    top: 40%;
+    z-index: 3;
+    background: #140025;
+    border: 1px solid var(--pink);
+    color: #e0a4ff;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 900;
+}
+/* WALLPAPER CONTROLS */
+.wallpaper-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+}
+.wallpaper-controls button {
+    padding: 11px 20px;
+    background: #180027dd;
+    border: 1px solid var(--pink);
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+    font-family: inherit;
+}
+.wallpaper-controls button:hover {
+    background: var(--purple);
+    box-shadow: 0 0 15px var(--pink);
+}
+#characterName {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 13px;
+}
+#wallpaperCount {
+    font-size: 11px;
+    color: #d6c4e7;
+}
+.wallpaper-hint {
+    text-align: center;
+    font-size: 11px;
+    color: #d9b5ff;
+    margin-top: 12px;
+}
+/* QUICK LINKS */
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    gap: 14px;
+    margin-top: 40px;
+}
+.quick-card {
+    padding: 20px 8px;
+    text-align: center;
+    background: linear-gradient(145deg,#241039,#0b0613);
+    border: 1px solid #6820a0;
+    border-radius: 14px;
+    transition: .3s;
+}
+.quick-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--pink);
+    box-shadow: 0 0 20px #8500ff66;
+}
+.quick-card .icon {
+    font-size: 27px;
+}
+.quick-card h4 {
+    font-size: 12px;
+    margin-top: 9px;
+}
+.quick-card p {
+    font-size: 9px;
+    color: #c4b5d5;
+    margin-top: 5px;
+}
+/* GENERAL SECTION TITLES */
+.dark-section {
+    background: #090612;
+}
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.section-title span {
+    color: #c879ff;
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+.section-title h2 {
+    font-size: 35px;
+    margin-top: 10px;
+}
+.section-title h2::after {
+    content: "";
+    display: block;
+    width: 75px;
+    height: 4px;
+    margin: 15px auto;
+    border-radius: 20px;
+    background: linear-gradient(90deg,var(--purple),var(--pink));
+}
+/* ABOUT */
+.about-grid {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+}
+.about-photo {
+    border: 2px solid var(--purple);
+    padding: 10px;
+    border-radius: 18px;
+    box-shadow: 0 0 25px #8500ff55;
+}
+.about-photo img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: center 25%;
+    border-radius: 12px;
+}
+.about-content h3 {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+.about-content h3 span {
+    color: var(--gold);
+}
+.about-content p {
+    color: #c5b9d1;
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 14px;
+}
+.details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+.detail {
+    padding: 13px;
+    background: #160b25;
+    border-left: 3px solid var(--purple);
+}
+.detail strong {
+    display: block;
+    color: #c879ff;
+    font-size: 10px;
+}
+.detail span {
+    font-size: 12px;
+}
+/* EDUCATION */
+.timeline {
+    max-width: 750px;
+    margin: auto;
+    border-left: 2px solid var(--purple);
+    padding-left: 30px;
+}
+.timeline-item {
+    background: #140b20;
+    padding: 23px;
+    border: 1px solid #4e1b78;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    position: relative;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -39px;
+    top: 25px;
+    width: 14px;
+    height: 14px;
+    background: var(--pink);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--pink);
+}
+.timeline-item small {
+    color: #d78aff;
+}
+.timeline-item h3 {
+    margin: 8px 0;
+}
+.timeline-item p {
+    color: #c4b9d2;
+    font-size: 12px;
+    line-height: 1.8;
+}
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+.card {
+    background: linear-gradient(145deg,#211039,#0b0713);
+    border: 1px solid #592080;
+    border-radius: 15px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: .3s;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 20px #8500ff55;
+    border-color: var(--pink);
+}
+.card .icon {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+.card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.card p {
+    color: #c4b9d2;
+    font-size: 12px;
+    line-height: 1.8;
+}
+/* SKILLS */
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+.skill-group {
+    position: relative;
+    padding: 28px;
+    border: 1px solid rgba(180, 90, 255, .28);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(35, 14, 57, .92), rgba(12, 7, 23, .96));
+    box-shadow: 0 15px 45px rgba(0, 0, 0, .22);
+    overflow: hidden;
+    transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+.skill-group::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    top: -105px;
+    right: -75px;
+    border-radius: 50%;
+    background: rgba(146, 0, 255, .16);
+    filter: blur(5px);
+    pointer-events: none;
+}
+.skill-group:hover {
+    transform: translateY(-7px);
+    border-color: rgba(208, 0, 255, .7);
+    box-shadow: 0 20px 55px rgba(146, 0, 255, .16);
+}
+.skill-group h3 {
+    color: #e0a3ff;
+    margin-bottom: 8px;
+    font-size: 19px;
+    position: relative;
+}
+.skill-subtitle {
+    color: #a99ab8;
+    font-size: 11px;
+    margin-bottom: 24px;
+    position: relative;
+}
+.skill {
+    margin-bottom: 21px;
+    position: relative;
+}
+.skill-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+.skill-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+.skill-icon {
+    width: 30px;
+    height: 30px;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 30px;
+    border-radius: 9px;
+    background: linear-gradient(145deg, rgba(146, 0, 255, .24), rgba(208, 0, 255, .1));
+    border: 1px solid rgba(196, 115, 255, .35);
+    font-size: 16px;
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+.skill:hover .skill-icon,
+.personal-skill:hover .skill-icon {
+    transform: translateY(-3px) rotate(-7deg) scale(1.08);
+    box-shadow: 0 0 18px rgba(208, 0, 255, .35);
+}
+.skill-percent {
+    color: #e7c6ff;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.bar {
+    height: 8px;
+    background: #28183b;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.fill {
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #9200ff, #d000ff, #ff5bc8);
+    background-size: 200% 100%;
+    box-shadow: 0 0 13px rgba(208, 0, 255, .35);
+    transition: width 1.6s cubic-bezier(.2,.8,.2,1);
+    animation: skillShimmer 3.5s linear infinite;
+}
+.personal-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    position: relative;
+}
+.personal-skill {
+    min-height: 100px;
+    padding: 15px 9px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid rgba(160, 90, 210, .28);
+    background: rgba(33, 13, 56, .72);
+    color: #eee3f7;
+    font-size: 10px;
+    line-height: 1.4;
+    transition: transform .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease;
+    animation: skillCardIn .65s both;
+}
+.personal-skill:nth-child(2n) { animation-delay: .08s; }
+.personal-skill:nth-child(3n) { animation-delay: .16s; }
+.personal-skill:hover {
+    transform: translateY(-6px);
+    background: rgba(83, 24, 125, .55);
+    border-color: rgba(208, 0, 255, .7);
+    box-shadow: 0 12px 25px rgba(146, 0, 255, .17);
+}
+.personal-skill .skill-icon {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    font-size: 19px;
+    border-radius: 12px;
+}
+@keyframes skillShimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+@keyframes skillCardIn {
+    from { opacity: 0; transform: translateY(18px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* CORE VALUES */
+.values-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 12% 18%, rgba(146, 0, 255, .13), transparent 38%),
+        radial-gradient(ellipse at 88% 82%, rgba(208, 0, 255, .10), transparent 35%);
+}
+.values-intro {
+    max-width: 560px;
+    margin: 14px auto 0;
+    color: #bfb0d0;
+    font-size: 13px;
+    line-height: 1.8;
+}
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    perspective: 1000px;
+}
+.value-card {
+    min-height: 245px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 28px 24px 25px;
+    border: 1px solid rgba(178, 105, 255, .27);
+    border-radius: 18px;
+    text-align: left;
+    background: linear-gradient(145deg, rgba(35, 16, 55, .96), rgba(10, 7, 19, .98));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), border-color .4s ease, box-shadow .4s ease, background .4s ease;
+}
+.value-card::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 170px;
+    height: 170px;
+    right: -80px;
+    top: -90px;
+    border-radius: 50%;
+    background: rgba(146, 0, 255, .18);
+    filter: blur(22px);
+    transition: transform .5s ease, opacity .5s ease;
+}
+.value-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #9200ff, #ff5bc8, transparent);
+    transform: scaleX(.15);
+    transform-origin: center;
+    opacity: .5;
+    transition: transform .45s ease, opacity .45s ease;
+}
+.value-card:hover {
+    transform: translateY(-10px) rotateX(2deg);
+    border-color: rgba(220, 115, 255, .78);
+    background: linear-gradient(145deg, rgba(54, 20, 82, .98), rgba(15, 8, 27, .99));
+    box-shadow: 0 22px 48px rgba(115, 0, 190, .22), 0 0 22px rgba(208, 0, 255, .12);
+}
+.value-card:hover::before { transform: scale(1.55); opacity: 1; }
+.value-card:hover::after { transform: scaleX(1); opacity: 1; }
+.value-number {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    color: rgba(222, 191, 255, .42);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+}
+.value-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+    border: 1px solid rgba(208, 0, 255, .34);
+    border-radius: 17px;
+    background: linear-gradient(145deg, rgba(146, 0, 255, .25), rgba(208, 0, 255, .09));
+    box-shadow: inset 0 0 18px rgba(208, 0, 255, .08), 0 0 20px rgba(146, 0, 255, .10);
+    font-size: 27px;
+    transition: transform .45s ease, box-shadow .45s ease;
+}
+.value-card:hover .value-icon {
+    transform: translateY(-4px) rotate(-8deg) scale(1.08);
+    box-shadow: 0 0 25px rgba(208, 0, 255, .28);
+}
+.value-card h3 { margin-bottom: 10px; color: #f5eaff; font-size: 16px; }
+.value-card p { color: #bfb2cd; font-size: 12px; line-height: 1.85; }
+.values-grid .value-card:nth-child(3n + 2) { transition-delay: .06s; }
+.values-grid .value-card:nth-child(3n) { transition-delay: .12s; }
+@media (max-width: 900px) { .values-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+    .values-grid { grid-template-columns: 1fr; gap: 14px; }
+    .value-card { min-height: 210px; padding: 24px 21px; }
+}
+/* PROJECTS */
+.project-card {
+    padding: 0;
+    overflow: hidden;
+    text-align: left;
+}
+.project-banner {
+    height: 150px;
+    background: linear-gradient(135deg,#39006d,#09051b);
+    display: grid;
+    place-items: center;
+    font-size: 55px;
+}
+.project-info {
+    padding: 22px;
+}
+.project-info p {
+    margin: 12px 0;
+}
+.project-info span {
+    color: #d78aff;
+    font-size: 11px;
+}
+/* CHESS GAME */
+.games-section {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(146,0,255,.12), transparent 35%),
+        radial-gradient(circle at 80% 80%, rgba(208,0,255,.10), transparent 35%),
+        #07040d;
+}
+.chess-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 620px) minmax(230px, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+.chess-card,
+.chess-info {
+    background: linear-gradient(145deg, rgba(30,14,45,.96), rgba(9,6,15,.98));
+    border: 1px solid rgba(208,0,255,.35);
+    border-radius: 20px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.28);
+}
+.chess-card { padding: 18px; }
+.chess-board {
+    width: min(100%, 600px);
+    aspect-ratio: 1;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    border: 4px solid #3b1b52;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(146,0,255,.20);
+}
+.chess-square {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", serif;
+    font-size: clamp(25px, 6vw, 54px);
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: filter .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+.chess-square.light { background: #d8c7e4; color: #21102b; }
+.chess-square.dark { background: #5b3870; color: #f8efff; }
+.chess-square:hover { filter: brightness(1.12); }
+.chess-square.selected {
+    box-shadow: inset 0 0 0 5px var(--pink), inset 0 0 28px rgba(208,0,255,.45);
+}
+.chess-square.legal {
+    position: relative;
+}
+.chess-square.legal::after {
+    content: "";
+    width: 22%;
+    height: 22%;
+    border-radius: 50%;
+    background: var(--pink);
+    opacity: .78;
+    position: absolute;
+}
+.chess-square.capture::after {
+    width: 72%;
+    height: 72%;
+    background: transparent;
+    border: 4px solid var(--pink);
+}
+.chess-square.last-move {
+    box-shadow: inset 0 0 0 999px rgba(255,215,0,.16);
+}
+.chess-status {
+    margin: 15px 2px 0;
+    padding: 13px 15px;
+    border: 1px solid #4d2864;
+    border-radius: 12px;
+    background: rgba(8,5,14,.72);
+    color: #e8dff0;
+    font-size: 12px;
+    text-align: center;
+}
+.chess-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+.chess-controls button {
+    flex: 1;
+    border: 1px solid var(--purple);
+    background: #170b22;
+    color: white;
+    border-radius: 25px;
+    padding: 11px 14px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+.chess-controls button:hover {
+    background: var(--purple);
+    box-shadow: 0 0 18px rgba(146,0,255,.35);
+}
+.chess-info {
+    padding: 25px;
+}
+.chess-info h3 {
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+.chess-info p,
+.chess-info li {
+    color: #c8bdd1;
+    font-size: 12px;
+    line-height: 1.8;
+}
+.chess-info ul {
+    padding-left: 20px;
+    margin-top: 12px;
+}
+.chess-turn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 9px 13px;
+    border-radius: 20px;
+    background: rgba(146,0,255,.13);
+    border: 1px solid rgba(208,0,255,.35);
+    color: #f1dfff;
+    font-size: 11px;
+    font-weight: 700;
+}
+@media(max-width:900px) {
+    .chess-layout { grid-template-columns: 1fr; }
+    .chess-board { max-width: 620px; }
+}
+@media(max-width:520px) {
+    .chess-card { padding: 10px; }
+    .chess-square { font-size: clamp(22px, 10vw, 40px); }
+}
+/* CONTACT */
+.contact-container {
+    max-width: 700px;
+    margin: auto;
+    text-align: center;
+}
+.contact-container p {
+    color: #c5b9d1;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+form {
+    background: #140b20;
+    border: 1px solid var(--purple);
+    border-radius: 15px;
+    padding: 25px;
+}
+input,textarea {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    background: #080510;
+    border: 1px solid #4b216d;
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+    outline: none;
+}
+input:focus,textarea:focus {
+    border-color: var(--pink);
+}
+textarea {
+    min-height: 130px;
+}
+form button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg,var(--purple),var(--pink));
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #030108;
+    border-top: 1px solid #49116e;
+}
+footer h2 {
+    color: var(--gold);
+}
+footer p {
+    color: #aaa;
+    font-size: 11px;
+    margin-top: 8px;
+}
+/* REVEAL ANIMATION */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all .8s ease;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+@keyframes floating {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+@keyframes glow {
+    from { transform: scale(.95); opacity: .6; }
+    to { transform: scale(1.05); opacity: 1; }
+}
+/* RESPONSIVE */
+@media(max-width:1050px) {
+    .nav-links {
+        gap: 9px;
+    }
+    .nav-links a {
+        font-size: 9px;
+    }
+    .quick-links {
+        grid-template-columns: repeat(3,1fr);
+    }
+}
+.skills-grid-three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+.skills-grid-three .skill-group {
+    padding: 23px 18px;
+}
+.skills-grid-three .personal-skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.skills-grid-three .personal-skill {
+    min-height: 88px;
+}
+@media(max-width: 1100px) {
+    .skills-grid-three {
+        grid-template-columns: 1fr 1fr;
+    }
+    .skills-grid-three .skill-group:first-child {
+        grid-column: 1 / -1;
+    }
+}
+@media(max-width: 650px) {
+    .skills-grid-three {
+        grid-template-columns: 1fr;
+    }
+    .skills-grid-three .skill-group:first-child {
+        grid-column: auto;
+    }
+}
+@media(max-width:900px) {
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+}
+@media(max-width:520px) {
+    .skill-group {
+        padding: 21px 16px;
+    }
+    .personal-skills-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media(max-width:850px) {
+    .menu-btn {
+        display: block;
+    }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 78px;
+        left: 0;
+        width: 100%;
+        background: #080510;
+        flex-direction: column;
+        padding: 25px;
+    }
+    .nav-links.show {
+        display: flex;
+    }
+    .nav-links a {
+        font-size: 13px;
+    }
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .hero p {
+        margin: auto;
+    }
+    .gold-line {
+        margin: 20px auto;
+    }
+    .buttons,.socials {
+        justify-content: center;
+    }
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-photo {
+        max-width: 400px;
+        margin: auto;
+    }
+    .cards {
+        grid-template-columns: repeat(2,1fr);
+    }
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    .dream-text {
+        right: 5%;
+    }
+}
+@media(max-width:550px) {
+    section {
+        padding: 75px 0;
+    }
+    .hero h1 {
+        font-size: clamp(30px, 7.2vw, 43px);
+    }
+    .greeting {
+        font-size: 0.52em;
+    }
+    .name-line {
+        letter-spacing: -1.8px;
+        white-space: nowrap;
+    }
+    .profile-circle {
+        width: 270px;
+        height: 350px;
+    }
+    .glow-ring {
+        width: 290px;
+        height: 290px;
+    }
+    .quick-links {
+        grid-template-columns: repeat(2,1fr);
+    }
+    .cards {
+        grid-template-columns: 1fr;
+    }
+    .details {
+        grid-template-columns: 1fr;
+    }
+    .section-title h2 {
+        font-size: 29px;
+    }
+    #home {
+        background-position: center;
+    }
+}
+@media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+    #rainCanvas {
+        display: none !important;
+    }
+}
+
+/* SECTION ANIMATED BACKGROUNDS */
+.section-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+section:not(#home) > .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* EDUCATION — ANIMATED ACADEMIC JOURNEY */
+.education-section {
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 12% 12%, rgba(146,0,255,.17), transparent 38%),
+        radial-gradient(ellipse at 90% 75%, rgba(255,215,0,.08), transparent 34%),
+        linear-gradient(145deg,#080611,#100b1b 52%,#07050d);
+}
+.education-intro {
+    max-width: 590px;
+    margin: 14px auto 0;
+    color: #c5b9d1;
+    font-size: 13px;
+    line-height: 1.8;
+}
+.education-road {
+    position: relative;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 8px 0 4px;
+}
+.education-line {
+    position: absolute;
+    top: 15px;
+    bottom: 35px;
+    left: 31px;
+    width: 2px;
+    overflow: hidden;
+    background: linear-gradient(to bottom,rgba(255,215,0,.9),rgba(146,0,255,.75),rgba(208,0,255,.25));
+}
+.education-line::after {
+    content:"";
+    position:absolute;
+    inset:-35% 0 auto;
+    height:35%;
+    background:linear-gradient(transparent,#fff6bd,transparent);
+    animation: educationLineFlow 3.5s linear infinite;
+}
+.education-entry {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0,1fr);
+    gap: 22px;
+    align-items: start;
+    margin-bottom: 28px;
+}
+.education-marker {
+    z-index: 1;
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255,215,0,.8);
+    background: radial-gradient(circle,#34234b 0%,#10091c 72%);
+    color: #ffe68a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    box-shadow: 0 0 0 7px rgba(255,215,0,.055),0 0 28px rgba(208,0,255,.25);
+    animation: educationPulse 3s ease-in-out infinite;
+}
+.education-entry:nth-child(3) .education-marker { animation-delay:.4s; }
+.education-entry:nth-child(4) .education-marker { animation-delay:.8s; }
+.education-entry:nth-child(5) .education-marker { animation-delay:1.2s; }
+.education-card {
+    position: relative;
+    overflow: hidden;
+    padding: 25px 28px 18px;
+    border: 1px solid rgba(188,142,255,.25);
+    border-radius: 19px;
+    background: linear-gradient(125deg,rgba(36,22,55,.92),rgba(12,9,20,.94));
+    box-shadow: 0 15px 38px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.045);
+    transition: transform .4s ease,border-color .4s ease,box-shadow .4s ease;
+}
+.education-card::before {
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:4px;
+    height:100%;
+    background:linear-gradient(#ffe58a,#b45cff,#d000ff);
+    transform:scaleY(.25);
+    transform-origin:top;
+    transition:transform .4s ease;
+}
+.education-card::after {
+    content:"✦";
+    position:absolute;
+    right:22px;
+    bottom:4px;
+    color:rgba(255,215,0,.09);
+    font-size:90px;
+    line-height:1;
+    transform:rotate(-12deg);
+    pointer-events:none;
+}
+.education-card:hover {
+    transform:translateY(-7px) translateX(5px);
+    border-color:rgba(255,215,0,.55);
+    box-shadow:0 22px 48px rgba(0,0,0,.32),0 0 28px rgba(146,0,255,.13);
+}
+.education-card:hover::before { transform:scaleY(1); }
+.education-card-top,.education-card-foot {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+}
+.education-level {
+    color:#e8c4ff;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+.education-year {
+    padding:6px 11px;
+    border:1px solid rgba(255,215,0,.3);
+    border-radius:30px;
+    color:#ffe58a;
+    background:rgba(255,215,0,.06);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+.education-card-body {
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:23px 0 19px;
+}
+.education-symbol {
+    flex:0 0 62px;
+    width:62px;
+    height:62px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(208,0,255,.28);
+    border-radius:17px;
+    background:linear-gradient(145deg,rgba(146,0,255,.2),rgba(255,215,0,.07));
+    font-size:28px;
+    box-shadow:inset 0 0 18px rgba(255,255,255,.025);
+    transition:transform .4s ease;
+}
+.education-card:hover .education-symbol { transform:rotate(-8deg) scale(1.08); }
+.education-card h3 {
+    margin:0 0 6px;
+    color:#fff;
+    font-size:20px;
+}
+.education-card h4 {
+    margin-bottom:6px;
+    color:#f2d98b;
+    font-size:13px;
+    font-weight:600;
+    line-height:1.6;
+}
+.education-card p {
+    color:#c5b9d1;
+    font-size:11px;
+    line-height:1.75;
+}
+.education-card-foot {
+    position:relative;
+    z-index:1;
+    padding-top:13px;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:#9588a5;
+    font-size:9px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+.education-status { color:#b8f2c8; }
+.education-status i {
+    display:inline-block;
+    width:7px;
+    height:7px;
+    margin-right:5px;
+    border-radius:50%;
+    background:#7be39b;
+    box-shadow:0 0 9px #7be39b;
+}
+.education-quote {
+    max-width:680px;
+    margin:50px auto 0;
+    padding:26px 30px;
+    border:1px solid rgba(255,215,0,.22);
+    border-radius:16px;
+    background:linear-gradient(110deg,rgba(255,215,0,.07),rgba(146,0,255,.09));
+    text-align:center;
+}
+.education-quote .quote-mark {
+    display:block;
+    height:35px;
+    color:#ffd700;
+    font-family:Georgia,serif;
+    font-size:55px;
+    line-height:1;
+}
+.education-quote p {
+    color:#f0e8f7;
+    font-size:14px;
+    line-height:1.8;
+    font-style:italic;
+}
+.education-quote .quote-caption {
+    display:block;
+    margin-top:13px;
+    color:#d5adff;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:3px;
+}
+@keyframes educationLineFlow {
+    from { transform:translateY(-100%); }
+    to { transform:translateY(400%); }
+}
+@keyframes educationPulse {
+    0%,100% { box-shadow:0 0 0 7px rgba(255,215,0,.045),0 0 18px rgba(208,0,255,.18); }
+    50% { box-shadow:0 0 0 10px rgba(255,215,0,.08),0 0 30px rgba(208,0,255,.35); }
+}
+@media(max-width:600px) {
+    .education-road { padding-left:0; }
+    .education-entry { grid-template-columns:45px minmax(0,1fr); gap:12px; }
+    .education-line { left:21px; }
+    .education-marker { width:44px; height:44px; font-size:10px; }
+    .education-card { padding:19px 16px 15px; }
+    .education-card-body { gap:12px; align-items:flex-start; }
+    .education-symbol { flex-basis:46px; width:46px; height:46px; font-size:22px; border-radius:13px; }
+    .education-card h3 { font-size:16px; }
+    .education-card h4 { font-size:11px; }
+    .education-card p { font-size:10px; }
+    .education-card-top { align-items:flex-start; }
+    .education-year { font-size:9px; }
+    .education-quote { padding:22px 18px; }
+    .education-quote p { font-size:12px; }
+}
+@media(prefers-reduced-motion:reduce) {
+    .education-line::after,.education-marker { animation:none !important; }
+}
+
+</style>
+</head>
+<body>
+<!-- GLOBAL FULL-PAGE RAIN ANIMATION -->
+<canvas id="rainCanvas" aria-hidden="true"></canvas>
+
+<!-- NAVIGATION -->
+<header>
+<div class="container">
+<nav>
+<a href="#home" class="logo">
+    <div class="logo-icon">JP</div>
+    <div>
+        <h2>JP Studio</h2>
+        <small>PERSONAL PORTFOLIO</small>
+    </div>
+</a>
+<div class="nav-right">
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#games">Games</a></li>
+        <li><a href="#values">Core Values</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="rain-toggle-btn" id="bgToggleBtn" type="button" title="Toggle Slide Backgrounds">✨ Backgrounds: ON</button>
+    <button class="rain-toggle-btn" id="rainToggleBtn" type="button" title="Toggle Rain Effect">🌧️ Rain: ON</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle Menu">☰</button>
+</div>
+</nav>
+</div>
+</header>
+
+<!-- HOME -->
+<section id="home">
+<div id="wallpaper"></div>
+<div class="home-overlay"></div>
+<div class="container home-content">
+<div class="hero">
+<div class="hero-content reveal">
+<span class="welcome">
+WELCOME TO MY PERSONAL PORTFOLIO
+</span>
+<h1>
+    <span class="greeting">Hello, I'm</span><br>
+    <span class="name-line">
+        <span class="white-name">Jhomer</span>
+        <span class="gold-name">Palacios</span>
+    </span>
+</h1>
+<h3>
+Aspiring IT Professional
+<span>|</span> Future Entrepreneur
+</h3>
+<div class="gold-line"></div>
+<p>
+Welcome to my personal portfolio! I'm an
+Information Technology student who is passionate
+about technology, problem-solving, creativity,
+and creating innovative solutions for a better future.
+</p>
+<div class="buttons">
+<a href="#about" class="btn btn-primary">♟ Learn More</a>
+<a href="cv.pdf" class="btn btn-secondary" download>↓ Download CV</a>
+</div>
+<div class="socials">
+<a href="https://facebook.com/" target="_blank" rel="noopener">f</a>
+<a href="https://github.com/" target="_blank" rel="noopener">GH</a>
+<a href="https://linkedin.com/" target="_blank" rel="noopener">in</a>
+<a href="https://youtube.com/" target="_blank" rel="noopener">▶</a>
+</div>
+</div>
+<div class="hero-image reveal">
+<div class="glow-ring"></div>
+<div class="profile-circle">
+<img src="profile.webp.jpg" alt="Jhomer Palacios">
+</div>
+<div class="dream-text">
+DREAM<br>CODE<br>INNOVATE
+</div>
+</div>
+</div>
+<!-- WALLPAPER CONTROLS -->
+<div class="wallpaper-controls">
+<button id="previousBtn">❮ Previous</button>
+<span id="characterName">JP Studio Original Background</span>
+<span id="wallpaperCount">0 / 10</span>
+<button id="nextBtn">Next ❯</button>
+<button id="autoBtn">▶ Auto Play</button>
+</div>
+<p class="wallpaper-hint">
+🔥 Click the background or use the buttons to explore the Akatsuki members!
+</p>
+<!-- QUICK LINKS -->
+<div class="quick-links">
+<a href="#about" class="quick-card">
+<div class="icon">♟</div>
+<h4>About Me</h4>
+<p>Get to know me</p>
+</a>
+<a href="#education" class="quick-card">
+<div class="icon">🎓</div>
+<h4>Education</h4>
+<p>My academic journey</p>
+</a>
+<a href="#achievements" class="quick-card">
+<div class="icon">🏆</div>
+<h4>Achievements</h4>
+<p>My milestones</p>
+</a>
+<a href="#skills" class="quick-card">
+<div class="icon">〈/〉</div>
+<h4>Skills</h4>
+<p>What I can do</p>
+</a>
+<a href="#projects" class="quick-card">
+<div class="icon">📁</div>
+<h4>Projects</h4>
+<p>My projects</p>
+</a>
+<a href="#values" class="quick-card">
+<div class="icon">★</div>
+<h4>Core Values</h4>
+<p>My beliefs</p>
+</a>
+</div>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="dark-section">
+<div class="container">
+<div class="section-title reveal">
+<span>GET TO KNOW ME</span>
+<h2>About Me</h2>
+</div>
+<div class="about-grid">
+<div class="about-photo reveal">
+<img src="mer.png" alt="Jhomer Palacios">
+</div>
+<div class="about-content reveal">
+<h3>Hello! I'm <span>Jhomer Palacios</span></h3>
+<p>
+I am an Information Technology student with a strong
+passion for game development, programming, and
+creating interactive gaming experiences.
+</p>
+<p>
+I enjoy exploring new game ideas, learning game
+development technologies, designing creative
+game mechanics, and improving my programming skills.
+</p>
+<p>
+My goal is to become a successful Game Developer
+who can create exciting, innovative, and enjoyable
+games that bring entertainment to players.
+</p>
+<div class="details">
+<div class="detail">
+<strong>FULL NAME</strong>
+<span>Jhomer Palacios</span>
+</div>
+<div class="detail">
+<strong>COURSE</strong>
+<span>Information Technology</span>
+</div>
+<div class="detail">
+<strong>UNIVERSITY</strong>
+<span>University of San Agustin</span>
+</div>
+<div class="detail">
+<strong>CAREER GOAL</strong>
+<span>Game Developer</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="education-section">
+    <div class="container">
+        <div class="section-title reveal">
+            <span>THE PATH THAT SHAPES MY FUTURE</span>
+            <h2>My Education</h2>
+            <p class="education-intro">Every chapter of my academic journey is a step toward the person I aspire to become.</p>
+        </div>
+
+        <div class="education-road">
+            <div class="education-line" aria-hidden="true"></div>
+
+            <article class="education-entry reveal">
+                <div class="education-marker"><span>01</span></div>
+                <div class="education-card">
+                    <div class="education-card-top">
+                        <span class="education-level">CURRENT CHAPTER</span>
+                        <span class="education-year">2026 – PRESENT</span>
+                    </div>
+                    <div class="education-card-body">
+                        <div class="education-symbol">🎓</div>
+                        <div>
+                            <h3>College Education</h3>
+                            <h4>University of San Agustin</h4>
+                            <p>Bachelor of Science in Information Technology</p>
+                        </div>
+                    </div>
+                    <div class="education-card-foot"><span>01 / 04</span><span class="education-status"><i></i> In progress</span></div>
+                </div>
+            </article>
+
+            <article class="education-entry reveal">
+                <div class="education-marker"><span>02</span></div>
+                <div class="education-card">
+                    <div class="education-card-top">
+                        <span class="education-level">FOUNDATION</span>
+                        <span class="education-year">2023 – 2024</span>
+                    </div>
+                    <div class="education-card-body">
+                        <div class="education-symbol">📘</div>
+                        <div>
+                            <h3>Senior High School</h3>
+                            <h4>St. Louise De Marilla School of Miagao, Iloilo, Inc.</h4>
+                            <p>Science, Technology, Engineering, and Mathematics (STEM)</p>
+                        </div>
+                    </div>
+                    <div class="education-card-foot"><span>02 / 04</span><span>Completed chapter</span></div>
+                </div>
+            </article>
+
+            <article class="education-entry reveal">
+                <div class="education-marker"><span>03</span></div>
+                <div class="education-card">
+                    <div class="education-card-top">
+                        <span class="education-level">GROWTH</span>
+                        <span class="education-year">2016 – 2017</span>
+                    </div>
+                    <div class="education-card-body">
+                        <div class="education-symbol">📚</div>
+                        <div>
+                            <h3>Junior High School</h3>
+                            <h4>St. Louise De Marilla School of Miagao, Iloilo, Inc.</h4>
+                            <p>A chapter of learning, discovery, and personal development.</p>
+                        </div>
+                    </div>
+                    <div class="education-card-foot"><span>03 / 04</span><span>Completed chapter</span></div>
+                </div>
+            </article>
+
+            <article class="education-entry reveal">
+                <div class="education-marker"><span>04</span></div>
+                <div class="education-card">
+                    <div class="education-card-top">
+                        <span class="education-level">THE BEGINNING</span>
+                        <span class="education-year">2010 – 2016</span>
+                    </div>
+                    <div class="education-card-body">
+                        <div class="education-symbol">✏️</div>
+                        <div>
+                            <h3>Elementary Education</h3>
+                            <h4>Miagao Central Elementary School</h4>
+                            <p>Where my journey of curiosity and learning began.</p>
+                        </div>
+                    </div>
+                    <div class="education-card-foot"><span>04 / 04</span><span>Completed chapter</span></div>
+                </div>
+            </article>
+        </div>
+        <div class="education-quote reveal">
+            <span class="quote-mark">“</span>
+            <p>Education is not just about reaching a destination. It is about growing with every step along the way.</p>
+            <span class="quote-caption">MY JOURNEY • MY FUTURE</span>
+        </div>
+    </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="dark-section">
+<div class="container">
+<div class="section-title reveal">
+<span>MY PROGRESS AND MILESTONES</span>
+<h2>Achievements</h2>
+</div>
+<div class="cards">
+<div class="card reveal">
+<div class="icon">🏆</div>
+<h3>Academic Achievement</h3>
+<p>I strive to achieve academic excellence by completing my school activities, improving my knowledge, and developing my skills as an IT student.</p>
+</div>
+<div class="card reveal">
+<div class="icon">🎓</div>
+<h3>Educational Milestone</h3>
+<p>I am currently pursuing a Bachelor of Science in Information Technology (BSIT). Every lesson and activity helps me grow and prepare for my future career.</p>
+</div>
+<div class="card reveal">
+<div class="icon">💻</div>
+<h3>Technical Development</h3>
+<p>I am continuously learning programming, web development, and computer skills to improve my knowledge and become a skilled IT professional.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+<div class="container">
+<div class="section-title reveal">
+<span>MY CAPABILITIES</span>
+<h2>Skills</h2>
+</div>
+<div class="skills-grid skills-grid-three">
+<div class="skill-group reveal">
+<h3>Technical Skills</h3>
+<p class="skill-subtitle">Programming languages, web development, and database knowledge</p>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">🌐</span>HTML</span><span class="skill-percent">80%</span></div>
+<div class="bar"><div class="fill" data-width="80%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">🎨</span>CSS</span><span class="skill-percent">70%</span></div>
+<div class="bar"><div class="fill" data-width="70%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">⚡</span>JavaScript</span><span class="skill-percent">55%</span></div>
+<div class="bar"><div class="fill" data-width="55%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">🗄️</span>Database Management</span><span class="skill-percent">65%</span></div>
+<div class="bar"><div class="fill" data-width="65%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">⚙️</span>C++</span><span class="skill-percent">93%</span></div>
+<div class="bar"><div class="fill" data-width="93%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">🐍</span>Python</span><span class="skill-percent">89%</span></div>
+<div class="bar"><div class="fill" data-width="89%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">☕</span>Java</span><span class="skill-percent">40%</span></div>
+<div class="bar"><div class="fill" data-width="40%"></div></div>
+</div>
+<div class="skill">
+<div class="skill-label"><span class="skill-name"><span class="skill-icon" aria-hidden="true">💎</span>Ruby</span><span class="skill-percent">20%</span></div>
+<div class="bar"><div class="fill" data-width="20%"></div></div>
+</div>
+</div>
+<div class="skill-group reveal">
+<h3>Personal Skills</h3>
+<p class="skill-subtitle">Strengths that support how I learn, work, and collaborate</p>
+<div class="personal-skills-grid">
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">💬</span><span>Communication</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">👥</span><span>Teamwork</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">💡</span><span>Problem Solving</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🧠</span><span>Creativity</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">⏰</span><span>Time Management</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🔄</span><span>Adaptability</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🔍</span><span>Critical Thinking</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">👔</span><span>Leadership</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">📚</span><span>Continuous Learning</span></div>
+</div>
+</div>
+<div class="skill-group reveal">
+<h3>Creative Skills &amp; Hobbies</h3>
+<p class="skill-subtitle">Creative interests and activities I enjoy</p>
+<div class="personal-skills-grid creative-skills-grid">
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">✏️</span><span>Drawing</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🎨</span><span>Painting</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">💃</span><span>Dancing</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🎸</span><span>Playing Electric Guitar</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🍳</span><span>Cooking</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">🎤</span><span>Singing</span></div>
+<div class="personal-skill"><span class="skill-icon" aria-hidden="true">✨</span><span>Decorating</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="dark-section">
+<div class="container">
+<div class="section-title reveal">
+<span>MY WORK AND EXPERIENCE</span>
+<h2>Projects & Research</h2>
+</div>
+<div class="cards">
+<div class="card project-card reveal">
+<div class="project-banner">🌐</div>
+<div class="project-info">
+<h3>Personal Portfolio Website</h3>
+<p>
+A personal website showcasing my profile,
+education, skills, achievements, and projects.
+</p>
+<span>HTML / CSS / JavaScript</span>
+</div>
+</div>
+<div class="card project-card reveal">
+<div class="project-banner">🖥️</div>
+<div class="project-info">
+<h3>VeritasTab</h3>
+<p>
+A proposed web-based examination security
+and monitoring system designed to support
+secure and reliable online assessments.
+</p>
+<span>Research Project</span>
+</div>
+</div>
+<div class="card project-card reveal">
+<div class="project-banner">💡</div>
+<div class="project-info">
+<h3>Future IT Projects</h3>
+<p>
+Future technology projects focused on innovation,
+problem-solving, and digital development.
+</p>
+<span>Innovation</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CORE VALUES -->
+<section id="values" class="values-section">
+    <div class="container">
+        <div class="section-title reveal">
+            <span>WHAT I STAND FOR</span>
+            <h2>My Core Values</h2>
+            <p class="values-intro">The principles that guide how I learn, create, work, and grow.</p>
+        </div>
+        <div class="values-grid">
+            <article class="value-card reveal">
+                <span class="value-number">01</span><div class="value-icon" aria-hidden="true">🎯</div>
+                <h3>Determination</h3><p>I stay focused on my goals and keep moving forward despite challenges.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">02</span><div class="value-icon" aria-hidden="true">🤝</div>
+                <h3>Integrity</h3><p>I choose honesty, responsibility, and what is right, even when it is difficult.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">03</span><div class="value-icon" aria-hidden="true">💡</div>
+                <h3>Innovation</h3><p>I explore fresh ideas and find better ways to solve problems.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">04</span><div class="value-icon" aria-hidden="true">📚</div>
+                <h3>Continuous Learning</h3><p>I treat every experience as a chance to gain knowledge and improve.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">05</span><div class="value-icon" aria-hidden="true">❤️</div>
+                <h3>Respect</h3><p>I value every person and treat others with kindness and understanding.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">06</span><div class="value-icon" aria-hidden="true">🏆</div>
+                <h3>Excellence</h3><p>I take pride in my work and always aim to give my best effort.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">07</span><div class="value-icon" aria-hidden="true">🎨</div>
+                <h3>Creativity</h3><p>I use imagination and original thinking to turn ideas into meaningful work.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">08</span><div class="value-icon" aria-hidden="true">🧭</div>
+                <h3>Responsibility</h3><p>I take ownership of my decisions, actions, and commitments.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">09</span><div class="value-icon" aria-hidden="true">🔥</div>
+                <h3>Perseverance</h3><p>I stay patient and keep trying when progress takes time.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">10</span><div class="value-icon" aria-hidden="true">⏳</div>
+                <h3>Discipline</h3><p>I manage my time, build good habits, and stay committed to my priorities.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">11</span><div class="value-icon" aria-hidden="true">👥</div>
+                <h3>Teamwork</h3><p>I listen, share ideas, and work with others toward a common goal.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">12</span><div class="value-icon" aria-hidden="true">🔍</div>
+                <h3>Curiosity</h3><p>I ask questions and explore how things work so I can understand more.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">13</span><div class="value-icon" aria-hidden="true">🔄</div>
+                <h3>Adaptability</h3><p>I stay open to change and adjust when I face new situations.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">14</span><div class="value-icon" aria-hidden="true">💜</div>
+                <h3>Empathy</h3><p>I try to understand other people's feelings and consider different perspectives.</p>
+            </article>
+            <article class="value-card reveal">
+                <span class="value-number">15</span><div class="value-icon" aria-hidden="true">🚀</div>
+                <h3>Passion</h3><p>I bring energy and enthusiasm to the things I care about and want to achieve.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- GAMES -->
+<section id="games" class="games-section">
+<div class="container">
+<div class="section-title reveal">
+    <span>PLAY AGAINST THE COMPUTER</span>
+    <h2>Chess Game</h2>
+</div>
+
+<div class="chess-layout">
+    <div class="chess-card reveal">
+        <div id="chessBoard" class="chess-board" aria-label="Chess board"></div>
+        <div id="chessStatus" class="chess-status">Your turn — you play White.</div>
+        <div class="chess-controls">
+            <button id="newChessGame" type="button">↻ New Game</button>
+            <button id="undoChessMove" type="button">↶ Undo</button>
+        </div>
+    </div>
+
+    <aside class="chess-info reveal">
+        <h3>♟ JP Studio Chess</h3>
+        <p>Play a local chess game against the computer. You are White and the computer is Black.</p>
+        <ul>
+            <li>Click a white piece to select it.</li>
+            <li>Click a highlighted square to move.</li>
+            <li>Legal moves are checked automatically.</li>
+            <li>The computer replies after your move.</li>
+            <li>Use New Game anytime to restart.</li>
+        </ul>
+        <div id="chessTurn" class="chess-turn">♙ Your turn</div>
+    </aside>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="dark-section">
+<div class="container">
+<div class="section-title reveal">
+<span>LET'S CONNECT</span>
+<h2>Contact Me</h2>
+</div>
+<div class="contact-container reveal">
+<p>
+Have a question, project idea, or opportunity?
+Feel free to send me a message.
+</p>
+<form id="contactForm">
+<input type="text" id="name"
+placeholder="Your Full Name" required>
+<input type="email" id="email"
+placeholder="Your Email Address" required>
+<input type="text" id="subject"
+placeholder="Subject" required>
+<textarea id="message"
+placeholder="Write your message here..."
+required></textarea>
+<button type="submit">SEND MESSAGE ↗</button>
+</form>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<h2>JP STUDIO</h2>
+<p>Dream. Code. Innovate.</p>
+<p>
+© <span id="year"></span> JP Studio.
+All Rights Reserved.
+</p>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+// MOBILE MENU
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("show");
+    menuBtn.textContent =
+    navLinks.classList.contains("show") ? "✕" : "☰";
+});
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("show");
+        menuBtn.textContent = "☰";
+    });
+});
+
+// AKATSUKI WALLPAPERS + MATCHING RAIN PALETTES
+const defaultRainPalette = [
+    "rgba(208, 0, 255, 0.50)",
+    "rgba(146, 0, 255, 0.45)",
+    "rgba(255, 215, 0, 0.28)",
+    "rgba(216, 199, 228, 0.35)"
+];
+
+const characters = [
+    {
+        name: "Pain (Nagato)",
+        image: "akatsuki/pain.jpg",
+        rainColors: ["rgba(155, 89, 255, 0.65)", "rgba(92, 165, 255, 0.50)", "rgba(216, 199, 228, 0.45)"]
+    },
+    {
+        name: "Konan",
+        image: "akatsuki/konan.jpg",
+        rainColors: ["rgba(240, 245, 255, 0.60)", "rgba(182, 148, 255, 0.50)", "rgba(120, 210, 255, 0.45)"]
+    },
+    {
+        name: "Itachi Uchiha",
+        image: "akatsuki/itachi.jpg",
+        rainColors: ["rgba(229, 9, 37, 0.65)", "rgba(255, 75, 75, 0.45)", "rgba(208, 0, 255, 0.35)"]
+    },
+    {
+        name: "Kisame Hoshigaki",
+        image: "akatsuki/kisame.jpg",
+        rainColors: ["rgba(0, 175, 255, 0.60)", "rgba(45, 110, 255, 0.50)", "rgba(180, 235, 255, 0.40)"]
+    },
+    {
+        name: "Deidara",
+        image: "akatsuki/deidara.jpg",
+        rainColors: ["rgba(255, 215, 0, 0.60)", "rgba(255, 152, 0, 0.50)", "rgba(255, 240, 160, 0.40)"]
+    },
+    {
+        name: "Sasori",
+        image: "akatsuki/sasori.jpg",
+        rainColors: ["rgba(229, 9, 37, 0.55)", "rgba(255, 110, 64, 0.45)", "rgba(210, 180, 140, 0.35)"]
+    },
+    {
+        name: "Hidan",
+        image: "akatsuki/hidan.jpg",
+        rainColors: ["rgba(229, 9, 37, 0.65)", "rgba(210, 210, 225, 0.45)", "rgba(160, 0, 40, 0.50)"]
+    },
+    {
+        name: "Kakuzu",
+        image: "akatsuki/kakuzu.jpg",
+        rainColors: ["rgba(46, 204, 113, 0.55)", "rgba(255, 215, 0, 0.45)", "rgba(229, 9, 37, 0.40)"]
+    },
+    {
+        name: "Zetsu",
+        image: "akatsuki/zetsu.jpg",
+        rainColors: ["rgba(102, 255, 153, 0.55)", "rgba(235, 255, 240, 0.40)", "rgba(146, 0, 255, 0.35)"]
+    },
+    {
+        name: "Obito (Tobi)",
+        image: "akatsuki/obito.jpg",
+        rainColors: ["rgba(255, 102, 0, 0.60)", "rgba(229, 9, 37, 0.55)", "rgba(208, 0, 255, 0.40)"]
+    }
+];
+
+let activeRainColors = defaultRainPalette;
+
+const home = document.getElementById("home");
+const wallpaper = document.getElementById("wallpaper");
+const characterName = document.getElementById("characterName");
+const wallpaperCount = document.getElementById("wallpaperCount");
+let currentIndex = -1;
+let autoPlay = null;
+
+// PRELOAD ALL IMAGES
+characters.forEach(character => {
+    const image = new Image();
+    image.src = character.image;
+});
+
+// CHANGE BACKGROUND
+function changeWallpaper(index) {
+    currentIndex = (index + characters.length) % characters.length;
+    const character = characters[currentIndex];
+    const image = new Image();
+    image.onload = function() {
+        wallpaper.style.backgroundImage = `url("${character.image}")`;
+        wallpaper.classList.add("show");
+        characterName.textContent = character.name;
+        wallpaperCount.textContent = `${currentIndex + 1} / ${characters.length}`;
+        activeRainColors = character.rainColors || defaultRainPalette;
+    };
+    image.onerror = function() {
+        if (autoPlay) {
+            clearInterval(autoPlay);
+            autoPlay = null;
+            autoBtn.textContent = "▶ Auto Play";
+            return;
+        }
+        alert("Image not found: " + character.image +
+        ". Please check your akatsuki folder and filename.");
+    };
+    image.src = character.image;
+}
+
+// NEXT
+function nextWallpaper() {
+    changeWallpaper(currentIndex + 1);
+}
+
+// PREVIOUS
+function previousWallpaper() {
+    if (currentIndex === -1) {
+        changeWallpaper(9);
+    } else {
+        changeWallpaper(currentIndex - 1);
+    }
+}
+
+// CLICK HOMEPAGE BACKGROUND
+home.addEventListener("click", function(event) {
+    if (event.target.closest("a,button")) {
+        return;
+    }
+    if (event.target === home ||
+        event.target === wallpaper ||
+        event.target.classList.contains("home-overlay")) {
+        nextWallpaper();
+    }
+});
+
+// BUTTON EVENTS
+document.getElementById("nextBtn").addEventListener("click", nextWallpaper);
+document.getElementById("previousBtn").addEventListener("click", previousWallpaper);
+
+// AUTO PLAY
+const autoBtn = document.getElementById("autoBtn");
+autoBtn.addEventListener("click", function() {
+    if (autoPlay) {
+        clearInterval(autoPlay);
+        autoPlay = null;
+        autoBtn.textContent = "▶ Auto Play";
+    } else {
+        if (currentIndex === -1) {
+            nextWallpaper();
+        }
+        autoPlay = setInterval(nextWallpaper, 5000);
+        autoBtn.textContent = "⏸ Stop Slideshow";
+    }
+});
+
+// START AUTO PLAY AUTOMATICALLY WHEN THE PAGE LOADS
+window.addEventListener("load", function() {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion && !autoPlay) autoBtn.click();
+});
+
+// GLOBAL FULL-PAGE RAIN ANIMATION + NAVBAR TOGGLE
+(function initGlobalRain() {
+    const canvas = document.getElementById("rainCanvas");
+    const toggleBtn = document.getElementById("rainToggleBtn");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+    let rainEnabled = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let animationId = null;
+
+    const dropCount = Math.min(135, Math.max(55, Math.floor(width / 11)));
+    const drops = [];
+    const splashes = [];
+
+    function pickColor() {
+        return activeRainColors[Math.floor(Math.random() * activeRainColors.length)];
+    }
+
+    function createDrop(randomY = true) {
+        return {
+            x: Math.random() * (width + 220) - 110,
+            y: randomY ? Math.random() * height : -35,
+            length: Math.random() * 18 + 13,
+            speedY: Math.random() * 6 + 7.5,
+            speedX: -1.4,
+            thickness: Math.random() * 1.3 + 0.65,
+            color: pickColor()
+        };
+    }
+
+    for (let i = 0; i < dropCount; i++) {
+        drops.push(createDrop(true));
+    }
+
+    window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    function animateRain() {
+        if (!rainEnabled) return;
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < drops.length; i++) {
+            const d = drops[i];
+            ctx.beginPath();
+            ctx.strokeStyle = d.color;
+            ctx.lineWidth = d.thickness;
+            ctx.lineCap = "round";
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(d.x + d.speedX * 2, d.y + d.length);
+            ctx.stroke();
+
+            d.x += d.speedX;
+            d.y += d.speedY;
+
+            if (d.y > height) {
+                if (Math.random() > 0.65) {
+                    splashes.push({
+                        x: d.x,
+                        y: height - 2,
+                        radius: 1,
+                        maxRadius: Math.random() * 8 + 4,
+                        alpha: 0.45,
+                        color: d.color
+                    });
+                }
+                drops[i] = createDrop(false);
+            }
+        }
+
+        for (let i = splashes.length - 1; i >= 0; i--) {
+            const s = splashes[i];
+            ctx.beginPath();
+            ctx.strokeStyle = s.color;
+            ctx.globalAlpha = s.alpha;
+            ctx.lineWidth = 1;
+            ctx.ellipse(s.x, s.y, s.radius * 1.8, s.radius * 0.5, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            s.radius += 0.35;
+            s.alpha -= 0.025;
+
+            if (s.alpha <= 0 || s.radius >= s.maxRadius) {
+                splashes.splice(i, 1);
+            }
+        }
+
+        animationId = requestAnimationFrame(animateRain);
+    }
+
+    function updateRainState() {
+        if (rainEnabled) {
+            canvas.classList.remove("hidden");
+            if (toggleBtn) {
+                toggleBtn.textContent = "🌧️ Rain: ON";
+                toggleBtn.classList.remove("off");
+            }
+            if (!animationId) animateRain();
+        } else {
+            canvas.classList.add("hidden");
+            if (toggleBtn) {
+                toggleBtn.textContent = "🌧️ Rain: OFF";
+                toggleBtn.classList.add("off");
+            }
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            ctx.clearRect(0, 0, width, height);
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            rainEnabled = !rainEnabled;
+            updateRainState();
+        });
+    }
+
+    updateRainState();
+})();
+
+// SCROLL ANIMATION
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        }
+    });
+}, {threshold:0.15});
+document.querySelectorAll(".reveal").forEach(element => {
+    observer.observe(element);
+});
+
+// SKILL BAR ANIMATION
+const skillObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.width = entry.target.dataset.width;
+            skillObserver.unobserve(entry.target);
+        }
+    });
+}, {threshold:0.3});
+document.querySelectorAll(".fill").forEach(skill => {
+    skillObserver.observe(skill);
+});
+
+// NAVIGATION ACTIVE STATE
+const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            document.querySelectorAll(".nav-links a").forEach(link => {
+                link.classList.toggle(
+                    "active",
+                    link.getAttribute("href") === "#" + entry.target.id
+                );
+            });
+        }
+    });
+}, {rootMargin:"-30% 0px -60% 0px"});
+document.querySelectorAll("section[id]").forEach(section => {
+    sectionObserver.observe(section);
+});
+
+// CHESS GAME — HUMAN (WHITE) VS COMPUTER (BLACK)
+(function initChessGame() {
+    const boardEl = document.getElementById("chessBoard");
+    const statusEl = document.getElementById("chessStatus");
+    const turnEl = document.getElementById("chessTurn");
+    const newGameBtn = document.getElementById("newChessGame");
+    const undoBtn = document.getElementById("undoChessMove");
+    if (!boardEl) return;
+
+    const pieces = {
+        wK:"♔", wQ:"♕", wR:"♖", wB:"♗", wN:"♘", wP:"♙",
+        bK:"♚", bQ:"♛", bR:"♜", bB:"♝", bN:"♞", bP:"♟"
+    };
+
+    let board = [];
+    let turn = "w";
+    let selected = null;
+    let legalMoves = [];
+    let history = [];
+    let gameOver = false;
+    let computerThinking = false;
+
+    function newBoard() {
+        return [
+            ["bR","bN","bB","bQ","bK","bB","bN","bR"],
+            ["bP","bP","bP","bP","bP","bP","bP","bP"],
+            [null,null,null,null,null,null,null,null],
+            [null,null,null,null,null,null,null,null],
+            [null,null,null,null,null,null,null,null],
+            [null,null,null,null,null,null,null,null],
+            ["wP","wP","wP","wP","wP","wP","wP","wP"],
+            ["wR","wN","wB","wQ","wK","wB","wN","wR"]
+        ];
+    }
+
+    function cloneBoard(b) {
+        return b.map(row => row.slice());
+    }
+
+    function inside(r,c) {
+        return r >= 0 && r < 8 && c >= 0 && c < 8;
+    }
+
+    function colorOf(piece) {
+        return piece ? piece[0] : null;
+    }
+
+    function typeOf(piece) {
+        return piece ? piece[1] : null;
+    }
+
+    function opposite(color) {
+        return color === "w" ? "b" : "w";
+    }
+
+    function findKing(b, color) {
+        for (let r=0; r<8; r++) {
+            for (let c=0; c<8; c++) {
+                if (b[r][c] === color + "K") return {r,c};
+            }
+        }
+        return null;
+    }
+
+    function pseudoMoves(b, r, c, includeKingMoves=true) {
+        const piece = b[r][c];
+        if (!piece) return [];
+        const color = colorOf(piece);
+        const type = typeOf(piece);
+        const moves = [];
+
+        const add = (rr,cc) => {
+            if (!inside(rr,cc)) return false;
+            const target = b[rr][cc];
+            if (!target) {
+                moves.push({r:rr,c:cc});
+                return true;
+            }
+            if (colorOf(target) !== color && typeOf(target) !== "K") {
+                moves.push({r:rr,c:cc});
+            }
+            return false;
+        };
+
+        if (type === "P") {
+            const dir = color === "w" ? -1 : 1;
+            const start = color === "w" ? 6 : 1;
+            const one = r + dir;
+            if (inside(one,c) && !b[one][c]) {
+                moves.push({r:one,c});
+                const two = r + 2*dir;
+                if (r === start && !b[two][c]) moves.push({r:two,c});
+            }
+            for (const dc of [-1,1]) {
+                const rr = r + dir, cc = c + dc;
+                if (inside(rr,cc) && b[rr][cc] && colorOf(b[rr][cc]) !== color && typeOf(b[rr][cc]) !== "K") {
+                    moves.push({r:rr,c:cc});
+                }
+            }
+        } else if (type === "N") {
+            for (const [dr,dc] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) add(r+dr,c+dc);
+        } else if (type === "B" || type === "R" || type === "Q") {
+            const dirs = [];
+            if (type === "B" || type === "Q") dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+            if (type === "R" || type === "Q") dirs.push([-1,0],[1,0],[0,-1],[0,1]);
+            for (const [dr,dc] of dirs) {
+                let rr=r+dr, cc=c+dc;
+                while (inside(rr,cc)) {
+                    if (!add(rr,cc)) break;
+                    rr += dr; cc += dc;
+                }
+            }
+        } else if (type === "K" && includeKingMoves) {
+            for (let dr=-1; dr<=1; dr++) {
+                for (let dc=-1; dc<=1; dc++) {
+                    if (dr || dc) add(r+dr,c+dc);
+                }
+            }
+        }
+        return moves;
+    }
+
+    function isSquareAttacked(b, r, c, byColor) {
+        const pawnRow = r + (byColor === "w" ? 1 : -1);
+        for (const dc of [-1,1]) {
+            const cc = c + dc;
+            if (inside(pawnRow,cc) && b[pawnRow][cc] === byColor + "P") return true;
+        }
+
+        for (const [dr,dc] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) {
+            const rr=r+dr, cc=c+dc;
+            if (inside(rr,cc) && b[rr][cc] === byColor + "N") return true;
+        }
+
+        for (let dr=-1; dr<=1; dr++) {
+            for (let dc=-1; dc<=1; dc++) {
+                if (dr || dc) {
+                    const rr=r+dr, cc=c+dc;
+                    if (inside(rr,cc) && b[rr][cc] === byColor + "K") return true;
+                }
+            }
+        }
+
+        const lines = [
+            [[-1,0],[1,0],[0,-1],[0,1],["R","Q"]],
+            [[-1,-1],[-1,1],[1,-1],[1,1],["B","Q"]]
+        ];
+        for (const group of lines) {
+            const pieceTypes = group[4];
+            for (let i=0; i<4; i++) {
+                const [dr,dc] = group[i];
+                let rr=r+dr, cc=c+dc;
+                while (inside(rr,cc)) {
+                    const p=b[rr][cc];
+                    if (p) {
+                        if (colorOf(p) === byColor && pieceTypes.includes(typeOf(p))) return true;
+                        break;
+                    }
+                    rr += dr; cc += dc;
+                }
+            }
+        }
+        return false;
+    }
+
+    function inCheck(b, color) {
+        const king = findKing(b, color);
+        return king ? isSquareAttacked(b, king.r, king.c, opposite(color)) : true;
+    }
+
+    function makeMove(b, from, to) {
+        const next = cloneBoard(b);
+        let piece = next[from.r][from.c];
+        next[to.r][to.c] = piece;
+        next[from.r][from.c] = null;
+
+        if (piece && typeOf(piece) === "P" && (to.r === 0 || to.r === 7)) {
+            next[to.r][to.c] = colorOf(piece) + "Q";
+        }
+        return next;
+    }
+
+    function legalMovesForPiece(b, r, c) {
+        const piece = b[r][c];
+        if (!piece) return [];
+        const color = colorOf(piece);
+        return pseudoMoves(b,r,c).filter(to => {
+            const next = makeMove(b,{r,c},to);
+            return !inCheck(next,color);
+        });
+    }
+
+    function allLegalMoves(b, color) {
+        const result = [];
+        for (let r=0; r<8; r++) {
+            for (let c=0; c<8; c++) {
+                if (colorOf(b[r][c]) === color) {
+                    for (const to of legalMovesForPiece(b,r,c)) {
+                        result.push({from:{r,c},to});
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    function evaluate(b) {
+        const values = {P:100,N:320,B:330,R:500,Q:900,K:20000};
+        let score = 0;
+        for (let r=0; r<8; r++) {
+            for (let c=0; c<8; c++) {
+                const p=b[r][c];
+                if (!p) continue;
+                score += (colorOf(p) === "b" ? 1 : -1) * values[typeOf(p)];
+            }
+        }
+        return score;
+    }
+
+    function minimax(b, depth, alpha, beta, maximizing) {
+        const color = maximizing ? "b" : "w";
+        const moves = allLegalMoves(b,color);
+        if (depth === 0 || moves.length === 0) {
+            if (moves.length === 0) {
+                if (inCheck(b,color)) return maximizing ? -999999 : 999999;
+                return 0;
+            }
+            return evaluate(b);
+        }
+
+        if (maximizing) {
+            let best = -Infinity;
+            for (const move of moves) {
+                best = Math.max(best, minimax(makeMove(b,move.from,move.to),depth-1,alpha,beta,false));
+                alpha = Math.max(alpha,best);
+                if (beta <= alpha) break;
+            }
+            return best;
+        } else {
+            let best = Infinity;
+            for (const move of moves) {
+                best = Math.min(best, minimax(makeMove(b,move.from,move.to),depth-1,alpha,beta,true));
+                beta = Math.min(beta,best);
+                if (beta <= alpha) break;
+            }
+            return best;
+        }
+    }
+
+    function computerMove() {
+        const moves = allLegalMoves(board,"b");
+        if (!moves.length) {
+            finishGame();
+            return;
+        }
+
+        let bestScore = -Infinity;
+        let bestMoves = [];
+        for (const move of moves) {
+            const score = minimax(makeMove(board,move.from,move.to),2,-Infinity,Infinity,false);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMoves = [move];
+            } else if (score === bestScore) {
+                bestMoves.push(move);
+            }
+        }
+
+        const move = bestMoves[Math.floor(Math.random()*bestMoves.length)];
+        history.push(cloneBoard(board));
+        board = makeMove(board,move.from,move.to);
+        turn = "w";
+        selected = null;
+        legalMoves = [];
+        computerThinking = false;
+        render();
+        updateStatus();
+    }
+
+    function finishGame() {
+        const moves = allLegalMoves(board,turn);
+        if (moves.length === 0) {
+            gameOver = true;
+            if (inCheck(board,turn)) {
+                statusEl.textContent = turn === "w"
+                    ? "Checkmate — Computer wins!"
+                    : "Checkmate — You win!";
+            } else {
+                statusEl.textContent = "Draw — Stalemate.";
+            }
+            turnEl.textContent = "♟ Game over";
+        }
+    }
+
+    function updateStatus() {
+        if (gameOver) return;
+        const check = inCheck(board,turn);
+        if (computerThinking) {
+            statusEl.textContent = "Computer is thinking...";
+            turnEl.textContent = "♟ Computer's turn";
+            return;
+        }
+        statusEl.textContent = turn === "w"
+            ? (check ? "Your turn — CHECK! Find a safe move." : "Your turn — you play White.")
+            : "Computer's turn...";
+        turnEl.textContent = turn === "w" ? "♙ Your turn" : "♟ Computer's turn";
+        if (allLegalMoves(board,turn).length === 0) finishGame();
+    }
+
+    function render() {
+        boardEl.innerHTML = "";
+        for (let r=0; r<8; r++) {
+            for (let c=0; c<8; c++) {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "chess-square " + ((r+c)%2===0 ? "light" : "dark");
+                btn.setAttribute("aria-label", `${String.fromCharCode(97+c)}${8-r}`);
+                const p = board[r][c];
+                btn.textContent = p ? pieces[p] : "";
+                if (selected && selected.r===r && selected.c===c) btn.classList.add("selected");
+                if (legalMoves.some(m=>m.r===r && m.c===c)) {
+                    btn.classList.add("legal");
+                    if (board[r][c]) btn.classList.add("capture");
+                }
+                btn.addEventListener("click", () => clickSquare(r,c));
+                boardEl.appendChild(btn);
+            }
+        }
+    }
+
+    function clickSquare(r,c) {
+        if (gameOver || computerThinking || turn !== "w") return;
+
+        if (selected) {
+            const chosen = legalMoves.find(m => m.r===r && m.c===c);
+            if (chosen) {
+                history.push(cloneBoard(board));
+                board = makeMove(board,selected,chosen);
+                turn = "b";
+                selected = null;
+                legalMoves = [];
+                render();
+                updateStatus();
+                setTimeout(() => {
+                    computerThinking = true;
+                    updateStatus();
+                    setTimeout(computerMove, 220);
+                }, 120);
+                return;
+            }
+        }
+
+        if (colorOf(board[r][c]) === "w") {
+            selected = {r,c};
+            legalMoves = legalMovesForPiece(board,r,c);
+        } else {
+            selected = null;
+            legalMoves = [];
+        }
+        render();
+    }
+
+    function reset() {
+        board = newBoard();
+        turn = "w";
+        selected = null;
+        legalMoves = [];
+        history = [];
+        gameOver = false;
+        computerThinking = false;
+        render();
+        updateStatus();
+    }
+
+    newGameBtn.addEventListener("click", reset);
+    undoBtn.addEventListener("click", () => {
+        if (!history.length || computerThinking || gameOver) return;
+        board = history.pop();
+        if (history.length) {
+            board = history.pop();
+        }
+        turn = "w";
+        selected = null;
+        legalMoves = [];
+        gameOver = false;
+        render();
+        updateStatus();
+    });
+
+    reset();
+})();
+
+// CURRENT YEAR
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// CONTACT FORM
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    // CHANGE THIS TO YOUR EMAIL ADDRESS
+    const recipient = "your-email@example.com";
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
+    const body =
+    "Name: " + name +
+    "\nEmail: " + email +
+    "\n\nMessage:\n" + message;
+    window.location.href =
+    "mailto:" + recipient +
+    "?subject=" + encodeURIComponent(subject) +
+    "&body=" + encodeURIComponent(body);
+});
+
+// SECTION ANIMATED BACKGROUNDS (one style per slide)
+(function initSectionBackgrounds() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let enabled = !reduce;
+    const bgBtn = document.getElementById("bgToggleBtn");
+    const P = "146,0,255", K = "208,0,255", G = "255,215,0", W = "216,199,228", B = "92,165,255";
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const make = (n, fn) => Array.from({ length: n }, fn);
+
+    const effects = {
+        // About: connected dots
+        about: {
+            init(w, h) {
+                return { p: make(Math.min(70, Math.round(w * h / 16000)), () => ({ x: rand(0, w), y: rand(0, h), vx: rand(-.45, .45), vy: rand(-.45, .45) })) };
+            },
+            draw(c, w, h, t, s) {
+                s.p.forEach(a => {
+                    a.x += a.vx; a.y += a.vy;
+                    if (a.x < 0 || a.x > w) a.vx *= -1;
+                    if (a.y < 0 || a.y > h) a.vy *= -1;
+                });
+                for (let i = 0; i < s.p.length; i++) {
+                    const a = s.p[i];
+                    c.fillStyle = `rgba(${K},.95)`;
+                    c.beginPath(); c.arc(a.x, a.y, 2.6, 0, 6.283); c.fill();
+                    for (let j = i + 1; j < s.p.length; j++) {
+                        const b = s.p[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+                        if (d < 150) {
+                            c.strokeStyle = `rgba(${P},${(0.7 * (1 - d / 150)).toFixed(3)})`;
+                            c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
+                        }
+                    }
+                }
+            }
+        },
+        // Education: twinkling stars and shooting stars
+        education: {
+            init(w, h) {
+                return { sh: null, p: make(Math.round(w * h / 9000), () => ({ x: rand(0, w), y: rand(0, h), r: rand(1, 2.6), ph: rand(0, 6.28), sp: rand(.0008, .003), g: Math.random() < .25 })) };
+            },
+            draw(c, w, h, t, s) {
+                s.p.forEach(a => {
+                    const al = .25 + .75 * (.5 + .5 * Math.sin(t * a.sp + a.ph));
+                    c.fillStyle = `rgba(${a.g ? G : W},${al.toFixed(3)})`;
+                    c.beginPath(); c.arc(a.x, a.y, a.r, 0, 6.283); c.fill();
+                });
+                if (!s.sh && Math.random() < .004) s.sh = { x: rand(0, w * .8), y: rand(0, h * .4), l: 0 };
+                if (s.sh) {
+                    const o = s.sh; o.l++; o.x += 9; o.y += 4.5;
+                    const g = c.createLinearGradient(o.x - 90, o.y - 45, o.x, o.y);
+                    g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(1, "rgba(255,240,170,.9)");
+                    c.strokeStyle = g; c.lineWidth = 2;
+                    c.beginPath(); c.moveTo(o.x - 90, o.y - 45); c.lineTo(o.x, o.y); c.stroke(); c.lineWidth = 1;
+                    if (o.l > 45) s.sh = null;
+                }
+            }
+        },
+        // Achievements: rising golden sparks
+        achievements: {
+            init(w, h) {
+                const mk = () => ({ x: rand(0, w), y: rand(0, h), vy: rand(.5, 1.3), r: rand(1.5, 3.6), sw: rand(0, 6.28), a: rand(.55, 1), o: Math.random() < .3 });
+                return { mk, p: make(Math.round(w * h / 14000), mk) };
+            },
+            draw(c, w, h, t, s) {
+                s.p.forEach(a => {
+                    a.y -= a.vy; a.sw += .02;
+                    const x = a.x + Math.sin(a.sw) * 14;
+                    if (a.y < -10) { a.y = h + 10; a.x = rand(0, w); }
+                    c.fillStyle = `rgba(${a.o ? "255,152,0" : G},${a.a})`;
+                    c.beginPath(); c.arc(x, a.y, a.r, 0, 6.283); c.fill();
+                });
+            }
+        },
+        // Skills: floating code symbols
+        skills: {
+            init(w, h) {
+                const ch = ["{ }", "</>", "( )", "=>", ";", "[ ]", "&&", "01", "#", "++"];
+                return { p: make(Math.round(w * h / 22000), () => ({ x: rand(0, w), y: rand(0, h), vy: rand(.2, .6), sz: rand(16, 32), ch: ch[Math.floor(rand(0, ch.length))], a: rand(.3, .6) })) };
+            },
+            draw(c, w, h, t, s) {
+                c.textBaseline = "middle";
+                s.p.forEach(a => {
+                    a.y -= a.vy;
+                    if (a.y < -30) { a.y = h + 30; a.x = rand(0, w); }
+                    c.font = `700 ${a.sz}px monospace`;
+                    c.fillStyle = `rgba(${K},${a.a})`;
+                    c.fillText(a.ch, a.x, a.y);
+                });
+            }
+        },
+        // Projects: scrolling grid with a scan line
+        projects: {
+            init() { return {}; },
+            draw(c, w, h, t) {
+                const gap = 56, off = (t * .02) % gap;
+                c.strokeStyle = `rgba(${P},.35)`;
+                for (let y = off - gap; y < h; y += gap) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); }
+                for (let x = 0; x < w; x += gap) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke(); }
+                const sy = ((t * .08) % (h + 200)) - 100;
+                const g = c.createLinearGradient(0, sy - 80, 0, sy + 80);
+                g.addColorStop(0, `rgba(${K},0)`); g.addColorStop(.5, `rgba(${K},.35)`); g.addColorStop(1, `rgba(${K},0)`);
+                c.fillStyle = g; c.fillRect(0, sy - 80, w, 160);
+            }
+        },
+        // Core Values: soft aurora waves
+        values: {
+            init() { return {}; },
+            draw(c, w, h, t) {
+                const cols = [P, K, B];
+                cols.forEach((col, k) => {
+                    [[80, .10], [44, .14], [14, .30]].forEach(([lw, al]) => {
+                        c.strokeStyle = `rgba(${col},${al})`; c.lineWidth = lw;
+                        c.beginPath();
+                        for (let x = 0; x <= w; x += 12) {
+                            const y = h * (.3 + .2 * k) + Math.sin(x * .004 + t * .0005 * (k + 1) + k * 2) * h * .09 + Math.sin(x * .011 - t * .0008) * 14;
+                            x === 0 ? c.moveTo(x, y) : c.lineTo(x, y);
+                        }
+                        c.stroke();
+                    });
+                });
+                c.lineWidth = 1;
+            }
+        },
+        // Games: drifting chess squares
+        games: {
+            init(w, h) {
+                return { p: make(Math.round(w * h / 28000), () => ({ x: rand(0, w), y: rand(0, h), s: rand(18, 52), r: rand(0, 6.28), vr: rand(-.006, .006), vy: rand(.15, .5), l: Math.random() < .4 })) };
+            },
+            draw(c, w, h, t, s) {
+                s.p.forEach(a => {
+                    a.y -= a.vy; a.r += a.vr;
+                    if (a.y < -60) { a.y = h + 60; a.x = rand(0, w); }
+                    c.save(); c.translate(a.x, a.y); c.rotate(a.r);
+                    c.fillStyle = a.l ? `rgba(${W},.16)` : `rgba(120,70,150,.5)`;
+                    c.fillRect(-a.s / 2, -a.s / 2, a.s, a.s);
+                    c.restore();
+                });
+            }
+        },
+        // Contact: glowing floating orbs
+        contact: {
+            init(w, h) {
+                const cols = [P, K, G, B];
+                return { p: make(7, (_, i) => ({ x: rand(0, w), y: rand(0, h), r: rand(90, 190), vx: rand(-.3, .3), vy: rand(-.3, .3), c: cols[i % 4] })) };
+            },
+            draw(c, w, h, t, s) {
+                s.p.forEach(a => {
+                    a.x += a.vx; a.y += a.vy;
+                    if (a.x < -a.r || a.x > w + a.r) a.vx *= -1;
+                    if (a.y < -a.r || a.y > h + a.r) a.vy *= -1;
+                    const g = c.createRadialGradient(a.x, a.y, 0, a.x, a.y, a.r);
+                    g.addColorStop(0, `rgba(${a.c},.45)`); g.addColorStop(1, `rgba(${a.c},0)`);
+                    c.fillStyle = g; c.beginPath(); c.arc(a.x, a.y, a.r, 0, 6.283); c.fill();
+                });
+            }
+        }
+    };
+
+    const targets = [];
+    function size(t) {
+        const r = t.sec.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        t.w = Math.max(1, Math.round(r.width)); t.h = Math.max(1, Math.round(r.height));
+        t.cv.width = t.w * dpr; t.cv.height = t.h * dpr;
+        t.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        t.s = t.fx.init(t.w, t.h);
+    }
+
+    Object.keys(effects).forEach(id => {
+        const sec = document.getElementById(id);
+        if (!sec) return;
+        const cv = document.createElement("canvas");
+        cv.className = "section-bg";
+        cv.setAttribute("aria-hidden", "true");
+        sec.insertBefore(cv, sec.firstChild);
+        const t = { sec, cv, ctx: cv.getContext("2d"), fx: effects[id], w: 0, h: 0, s: null, visible: false };
+        targets.push(t);
+        size(t);
+        if ("ResizeObserver" in window) new ResizeObserver(() => size(t)).observe(sec);
+        if ("IntersectionObserver" in window) {
+            new IntersectionObserver(es => { t.visible = es[0].isIntersecting; }).observe(sec);
+        } else { t.visible = true; }
+    });
+
+    function setEnabled(on) {
+        enabled = on;
+        targets.forEach(t => { t.cv.style.display = on ? "block" : "none"; });
+        if (bgBtn) {
+            bgBtn.textContent = on ? "✨ Backgrounds: ON" : "✨ Backgrounds: OFF";
+            bgBtn.classList.toggle("off", !on);
+        }
+    }
+    if (bgBtn) bgBtn.addEventListener("click", () => setEnabled(!enabled));
+    setEnabled(enabled);
+
+    function loop(now) {
+        targets.forEach(t => {
+            if (!enabled || !t.visible) return;
+            t.ctx.clearRect(0, 0, t.w, t.h);
+            t.fx.draw(t.ctx, t.w, t.h, now, t.s);
+        });
+        requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
